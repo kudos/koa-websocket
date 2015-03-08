@@ -1,0 +1,37 @@
+{
+  "name": "koa-websocket",
+  "version": "0.1.0",
+  "description": "Light wrapper around Koa providing a websocket middleware handler that is koa-route compatible.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "keywords": [
+    "koa",
+    "websockets",
+    "ws",
+    "sockets",
+    "routes"
+  ],
+  "author": {
+    "name": "Jonathan Cremin",
+    "email": "jonathan@crem.in",
+    "url": "https://crem.in",
+    "twitter": "https://twitter.com/kudoz"
+  },
+  "repository": "git://github.com/kudos/koa-websocket",
+  "bugs": "https://github.com/kudos/koa-websocket/issues",
+  "homepage": "https://github.com/kudos/koa-websocket",
+  "license": "MIT",
+  "dependencies": {
+    "co": "^4.4.0",
+    "debug": "^2.1.2",
+    "koa-compose": "^2.3.0",
+    "ws": "^0.7.1"
+  },
+  "devDependencies": {
+    "koa": "^0.18.1",
+    "koa-route": "^2.4.0",
+    "mocha": "^2.2.0"
+  }
+}
