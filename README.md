@@ -1,6 +1,6 @@
 # koa-websocket
 
-
+[![Build Status](https://travis-ci.org/kudos/koa-websocket.svg?branch=master)](https://travis-ci.org/kudos/koa-websocket)
 
 ## Installation
 
