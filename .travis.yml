@@ -9,4 +9,4 @@ matrix:
     - node_js: "iojs"
   fast_finish: true
 script: 
-  - npm test $NODE_FLAGS
+  - npm test
