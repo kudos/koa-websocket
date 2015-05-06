@@ -11,7 +11,7 @@
 ```js
 const koa = require('koa'),
   route = require('koa-route'),
-  websockify = require('../');
+  websockify = require('koa-websocket');
 
 const app = websockify(koa());
 
