@@ -1,6 +1,7 @@
 'use strict';
 
-const compose = require('koa-compose'),
+const url = require('url'),
+  compose = require('koa-compose'),
   co = require('co'),
   ws = require('ws');
 const WebSocketServer = ws.Server;
@@ -19,12 +20,17 @@ KoaWebSocketServer.prototype.listen = function (server) {
 };
 
 KoaWebSocketServer.prototype.onConnection = function(socket) {
+  debug('Connection received');
   socket.on('error', function (err) {
     debug('Error occurred:', err);
   });
   const fn = co.wrap(compose(this.middleware));
-  socket.path = socket.upgradeReq.url;
-  fn.bind(socket).call().catch(function(err) {
+
+  let context = this.app.createContext(socket.upgradeReq, {});
+  context.websocket = socket;
+  context.path = url.parse(socket.upgradeReq.url).pathname;
+
+  fn.bind(context).call().catch(function(err) {
     debug(err);
   });
 };
