@@ -1,6 +1,6 @@
 {
   "name": "koa-websocket",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Light wrapper around Koa providing a websocket middleware handler that is koa-route compatible.",
   "main": "index.js",
   "scripts": {
@@ -30,8 +30,8 @@
     "ws": "^0.7.2"
   },
   "devDependencies": {
-    "koa": "^0.18.1",
+    "koa": "^0.21.0",
     "koa-route": "^2.4.0",
-    "mocha": "~2.1.0"
+    "mocha": "~2.2.5"
   }
 }

@@ -26,7 +26,7 @@ KoaWebSocketServer.prototype.onConnection = function(socket) {
   });
   const fn = co.wrap(compose(this.middleware));
 
-  let context = this.app.createContext(socket.upgradeReq, {});
+  const context = this.app.createContext(socket.upgradeReq);
   context.websocket = socket;
   context.path = url.parse(socket.upgradeReq.url).pathname;
 
