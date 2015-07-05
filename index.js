@@ -1,9 +1,10 @@
-"use strict";
+'use strict';
 
-const WebSocketServer = require('ws').Server,
-  debug = require('debug')('koa:websockets'),
-  compose = require('koa-compose'),
-  co = require('co');
+const compose = require('koa-compose'),
+  co = require('co'),
+  ws = require('ws');
+const WebSocketServer = ws.Server;
+const debug = require('debug')('koa:websockets');
 
 function KoaWebSocketServer (app) {
   this.app = app;
