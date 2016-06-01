@@ -2,6 +2,18 @@
 
 Note: koa-websockets follows semver.
 
+## v2.0.0
+
+### Improvements
+
+* Bump ws major for DoS fix.
+
+## v1.1.0
+
+### Improvements
+
+* Bump ws for iojs 3.
+
 ## v1.0.0
 
 ### Improvements
