@@ -2,6 +2,10 @@
 
 Note: koa-websocket follows semver.
 
+## v3.0.1
+
+Because NPM wouldn't let me retroactively tag 3.0.0 as `next` instead of latest.
+
 ## v3.0.0
 
 This is a pre-release for compatibility with Koa 2. Doing `npm install koa-websocket` will continue to give you 2.x until Koa 2 is stable.
