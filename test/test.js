@@ -2,23 +2,23 @@
 
 var assert = require('assert'),
   WebSocket = require('ws'),
-  koa = require('koa'),
+  Koa = require('koa'),
   route = require('koa-route');
 
 var koaws = require('..');
 
 describe('should route ws messages seperately', function() {
-  var app = koaws(koa());
-  app.ws.use(route.all('/abc', function*() {
-    this.websocket.on('message', function(message) {
-      this.websocket.send(message);
-    }.bind(this));
+  var app = koaws(new Koa());
+  app.ws.use(route.all('/abc', function(ctx){
+    ctx.websocket.on('message', function(message) {
+      ctx.websocket.send(message);
+    });
   }));
 
-  app.ws.use(route.all('/def', function*() {
-    this.websocket.on('message', function(message) {
-      this.websocket.send(message);
-    }.bind(this));
+  app.ws.use(route.all('/def', function(ctx){
+    ctx.websocket.on('message', function(message) {
+      ctx.websocket.send(message);
+    });
   }));
 
   var server = app.listen();
