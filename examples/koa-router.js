@@ -1,10 +1,10 @@
-var koa = require('koa');  
-var websockify = require('koa-websocket');
-var router = require('koa-router');
-var app = koa();
+import koa from 'koa';
+import router from 'koa-router';
+import websockify from 'koa-websocket';
 
-var api = router();
-var socket = websockify(app);
+const app = websockify(koa());
+
+const api = router();
 
 api.get('/*', function* (next) {
   this.websocket.send('Hello World');

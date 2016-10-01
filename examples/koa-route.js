@@ -1,8 +1,6 @@
-'use strict';
-
-const koa = require('koa'),
-  route = require('koa-route'),
-  websockify = require('../');
+import koa from 'koa';
+import route from 'koa-route';
+import websockify from 'koa-websocket';
 
 const app = websockify(koa());
 

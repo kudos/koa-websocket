@@ -2,6 +2,8 @@
 
 [![Circle CI](https://circleci.com/gh/kudos/koa-websocket.svg?style=svg)](https://circleci.com/gh/kudos/koa-websocket)
 
+> This is for Koa 1, if you're looking for Koa/Koa-route 2 compatibility see the `next` branch.
+
 ## Installation
 
 `npm install koa-websocket`
@@ -29,13 +31,13 @@ app.ws.use(route.all('/', function* (next) {
    *`this` refers to the context in the `app.ws` instance, not `app`. `app` and `app.ws` use separate middleware/contexts.
    * to access a middleware's context here, you must pass the middleware to `app.ws.use()`.
    */
-   
+
    // the websocket is added to the context as `this.websocket`.
   this.websocket.on('message', function(message) {
     // print message from the client
     console.log(message);
   });
-  
+
   // send a message to our client
   this.websocket.send('Hello Client!');
 
@@ -68,7 +70,7 @@ socket.onmessage = function (event) {
 ```
 
 ## Sharing middleware between Koa and WebSockets
-To use middleware in WebSockets, the middleware must be passed in to `app.ws.use()`. Passing your middleware only to `app.use()` will not make it available in WebSockets.  You can share your middleware between Koa and WebSockets by passing an instance of the middleware to both `app.use()` and `app.ws.use()`. 
+To use middleware in WebSockets, the middleware must be passed in to `app.ws.use()`. Passing your middleware only to `app.use()` will not make it available in WebSockets.  You can share your middleware between Koa and WebSockets by passing an instance of the middleware to both `app.use()` and `app.ws.use()`.
 
 The following example shows how to share a session store with WebSockets.
 
@@ -97,19 +99,3 @@ app.ws.use(route.all('/', function* (next) {
 app.listen(3000);
 
 ```
-
-## Accessing the `this.websocket` instance in the Koa app
-If you'd like to access the WebSocket instance from Koa using `this.websocket`, we need to add the `this.websocket` context to our Koa app from inside our WebSockets handler.
-
-```js
-app.ws.use(route.all('/', function* (next) {
-  // access the main Koa app's context via `app.context`.
-  // Here we add `this.websocket` from our WebSockets context to the main Koa app's context.
-  // It will then be available in Koa's context via `this.websocket`.
-  app.context.websocket = this.websocket;
-  yield next;
-}));
-```
-
-
-

@@ -5,7 +5,7 @@ const url = require('url'),
   co = require('co'),
   ws = require('ws');
 const WebSocketServer = ws.Server;
-const debug = require('debug')('koa:websockets');
+const debug = require('debug')('koa:websocket');
 
 function KoaWebSocketServer (app) {
   this.app = app;
@@ -21,7 +21,8 @@ KoaWebSocketServer.prototype.listen = function (server) {
 
 KoaWebSocketServer.prototype.onConnection = function(socket) {
   debug('Connection received');
-  socket.on('error', function (err) {
+  socket.on('error', (err) => {
+    this.emit('error', err);
     debug('Error occurred:', err);
   });
   const fn = co.wrap(compose(this.middleware));
@@ -30,7 +31,7 @@ KoaWebSocketServer.prototype.onConnection = function(socket) {
   context.websocket = socket;
   context.path = url.parse(socket.upgradeReq.url).pathname;
 
-  fn.bind(context).call().catch(function(err) {
+  fn.bind(context).call().catch((err) => {
     debug(err);
   });
 };

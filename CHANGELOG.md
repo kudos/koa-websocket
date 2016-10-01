@@ -1,6 +1,13 @@
 # Changelog
 
-Note: koa-websockets follows semver.
+Note: koa-websocket follows semver.
+
+## v2.1.0
+
+### Improvements
+
+* Bubble up socket errors
+* Minor cleanups
 
 ## v2.0.0
 
