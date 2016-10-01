@@ -9,6 +9,22 @@ var koaws = require('..');
 
 describe('should route ws messages seperately', function() {
   var app = koaws(new Koa());
+
+  app.ws.use(function(ctx, next){
+    ctx.websocket.on('message', function(message) {
+      if (message == '123') {
+        ctx.websocket.send(message);
+      }
+    });
+    return next();
+  });
+
+  app.ws.use(route.all('/abc', function(ctx){
+    ctx.websocket.on('message', function(message) {
+      ctx.websocket.send(message);
+    });
+  }));
+
   app.ws.use(route.all('/abc', function(ctx){
     ctx.websocket.on('message', function(message) {
       ctx.websocket.send(message);
@@ -22,6 +38,17 @@ describe('should route ws messages seperately', function() {
   }));
 
   var server = app.listen();
+
+  it('sends 123 message to any route', function(done){
+    var ws = new WebSocket('ws://localhost:' + server.address().port + '/not-a-route');
+    ws.on('open', function() {
+      ws.send('123');
+    });
+    ws.on('message', function(message) {
+      assert(message === '123');
+      done();
+    });
+  });
 
   it('sends abc message to abc route', function(done){
     var ws = new WebSocket('ws://localhost:' + server.address().port + '/abc');
@@ -56,3 +83,4 @@ describe('should route ws messages seperately', function() {
     });
   });
 });
+;
