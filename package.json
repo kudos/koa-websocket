@@ -9,6 +9,7 @@
   "keywords": [
     "koa",
     "websockets",
+    "uws",
     "ws",
     "sockets",
     "routes"
@@ -27,7 +28,7 @@
     "co": "^4.4.0",
     "debug": "^2.1.2",
     "koa-compose": "^3.0.0",
-    "ws": "^1.1.0"
+    "uws": "^0.12"
   },
   "devDependencies": {
     "koa": "^2.0.0-alpha.7",
