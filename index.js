@@ -7,15 +7,17 @@ const url = require('url'),
 const WebSocketServer = ws.Server;
 const debug = require('debug')('koa:websockets');
 
-function KoaWebSocketServer(app) {
+function KoaWebSocketServer(app, opts) {
   this.app = app;
+  this.opts = opts;
   this.middleware = [];
 }
 
 KoaWebSocketServer.prototype.listen = function(server) {
-  this.server = new WebSocketServer({
+  const opts = Object.assign({
     server: server
-  });
+  }, this.opts);
+  this.server = new WebSocketServer(opts);
   this.server.on('connection', this.onConnection.bind(this));
 };
 
