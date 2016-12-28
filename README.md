@@ -36,5 +36,4 @@ app.ws.use(route.all('/test/:id', function (ctx) {
 }));
 
 app.listen(3000);
-
 ```
