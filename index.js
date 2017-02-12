@@ -7,15 +7,17 @@ const url = require('url'),
 const WebSocketServer = ws.Server;
 const debug = require('debug')('koa:websockets');
 
-function KoaWebSocketServer (app) {
+function KoaWebSocketServer(app, opts) {
   this.app = app;
+  this.opts = opts;
   this.middleware = [];
 }
 
-KoaWebSocketServer.prototype.listen = function (server) {
-  this.server = new WebSocketServer({
-      server: server
-  });
+KoaWebSocketServer.prototype.listen = function(server) {
+  const opts = Object.assign({
+    server: server
+  }, this.opts);
+  this.server = new WebSocketServer(opts);
   this.server.on('connection', this.onConnection.bind(this));
 };
 
@@ -35,12 +37,12 @@ KoaWebSocketServer.prototype.onConnection = function(socket) {
   });
 };
 
-KoaWebSocketServer.prototype.use = function (fn) {
+KoaWebSocketServer.prototype.use = function(fn) {
   this.middleware.push(fn);
   return this;
 };
 
-module.exports = function (app) {
+module.exports = function(app) {
   const oldListen = app.listen;
   app.listen = function () {
     debug('Attaching server...');
