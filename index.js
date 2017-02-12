@@ -3,7 +3,7 @@
 const url = require('url'),
   compose = require('koa-compose'),
   co = require('co'),
-  ws = require('ws');
+  ws = require('uws');
 const WebSocketServer = ws.Server;
 const debug = require('debug')('koa:websockets');
 
