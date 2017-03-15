@@ -12,10 +12,8 @@ function KoaWebSocketServer (app) {
   this.middleware = [];
 }
 
-KoaWebSocketServer.prototype.listen = function (server) {
-  this.server = new WebSocketServer({
-      server: server
-  });
+KoaWebSocketServer.prototype.listen = function (options) {
+  this.server = new WebSocketServer(options);
   this.server.on('connection', this.onConnection.bind(this));
 };
 
@@ -40,12 +38,21 @@ KoaWebSocketServer.prototype.use = function (fn) {
   return this;
 };
 
-module.exports = function (app) {
+module.exports = function (app, wsOptions) {
   const oldListen = app.listen;
   app.listen = function () {
     debug('Attaching server...');
     app.server = oldListen.apply(app, arguments);
-    app.ws.listen(app.server);
+    const options = {};
+    if (wsOptions) {
+      for (var key in wsOptions) {
+        if (wsOptions.hasOwnProperty(key)) {
+          options[key] = wsOptions[key];
+        }
+      }
+    }
+    options.server = app.server;
+    app.ws.listen(options);
     return app.server;
   };
   app.ws = new KoaWebSocketServer(app);

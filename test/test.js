@@ -8,7 +8,11 @@ var assert = require('assert'),
 var koaws = require('..');
 
 describe('should route ws messages seperately', function() {
-  var app = koaws(new Koa());
+  const app = koaws(new Koa(), {
+    handleProtocols: function (protocols, callback) {
+      callback(protocols.indexOf("bad_protocol") === -1, protocols[0]);
+    }
+  });
 
   app.ws.use(function(ctx, next){
     ctx.websocket.on('message', function(message) {
@@ -79,6 +83,20 @@ describe('should route ws messages seperately', function() {
     });
     ws.on('message', function(message) {
       assert(message === 'abc');
+      done();
+    });
+  });
+
+  it('reject bad protocol use wsOptions', function(done){
+    var ws = new WebSocket('ws://localhost:' + server.address().port + '/abc', ['bad_protocol']);
+    ws.on('open', function() {
+      ws.send('abc');
+    });
+    ws.on('message', function(message) {
+      assert(null);
+      done();
+    });
+    ws.on('error', function() {
       done();
     });
   });

@@ -31,6 +31,28 @@ app.ws.use(route.all('/test/:id', function (ctx) {
   ctx.websocket.send('Hello World');
   ctx.websocket.on('message', function(message) {
     // do something with the message from client
+        console.log(message);
+  });
+}));
+
+app.listen(3000);
+
+```
+
+With custom websocket options.
+
+```
+const Koa = require('koa'),
+  route = require('koa-route'),
+  websockify = require('koa-websocket');
+
+const wsOptions = {};
+const app = websockify(koa(), wsOptions);
+
+app.ws.use(route.all('/', function* (ctx) {
+   // the websocket is added to the context as `this.websocket`.
+  ctx.websocket.on('message', function(message) {
+    // print message from the client
     console.log(message);
   });
 }));
