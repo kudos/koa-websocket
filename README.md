@@ -14,7 +14,8 @@ const koa = require('koa'),
   route = require('koa-route'),
   websockify = require('koa-websocket');
 
-const app = websockify(koa());
+const wsOptions = {};
+const app = websockify(koa(), wsOptions);
 
 /**
  * We define a route handler for when a new connection is made.
