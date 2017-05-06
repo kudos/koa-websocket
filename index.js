@@ -43,7 +43,7 @@ module.exports = function (app, wsOptions) {
   app.listen = function () {
     debug('Attaching server...');
     app.server = oldListen.apply(app, arguments);
-    const options = {};
+    const options = { server: app.server};
     if (wsOptions) {
       for (var key in wsOptions) {
         if (wsOptions.hasOwnProperty(key)) {
@@ -51,7 +51,6 @@ module.exports = function (app, wsOptions) {
         }
       }
     }
-    options.server = app.server;
     app.ws.listen(options);
     return app.server;
   };

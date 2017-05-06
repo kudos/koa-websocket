@@ -9,8 +9,11 @@ var koaws = require('..');
 
 describe('should route ws messages seperately', function() {
   const app = koaws(new Koa(), {
-    handleProtocols: function (protocols, callback) {
-      callback(protocols.indexOf("bad_protocol") === -1, protocols[0]);
+    handleProtocols: function (protocols) {
+      if (protocols.indexOf("bad_protocol") === -1)
+        return null;
+      else
+        return false;
     }
   });
 
@@ -92,11 +95,8 @@ describe('should route ws messages seperately', function() {
     ws.on('open', function() {
       ws.send('abc');
     });
-    ws.on('message', function(message) {
-      assert(null);
-      done();
-    });
-    ws.on('error', function() {
+    ws.on('unexpected-response', function() {
+      assert(true);
       done();
     });
   });
