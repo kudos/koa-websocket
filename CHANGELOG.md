@@ -2,6 +2,12 @@
 
 Note: koa-websocket follows semver.
 
+## v4.0.0
+
+* Switch Koa v2 support to master, and moved v1 to the legacy branch.
+* Added ability to set websocket options.
+* Upgraded to websocket 2.x.
+
 ## v3.0.1
 
 Because NPM wouldn't let me retroactively tag 3.0.0 as `next` instead of latest.

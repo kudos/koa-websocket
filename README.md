@@ -2,7 +2,7 @@
 
 [![Circle CI](https://circleci.com/gh/kudos/koa-websocket.svg?style=svg)](https://circleci.com/gh/kudos/koa-websocket)
 
-> This is a pre-release for compatibility with Koa 2. Doing `npm install koa-websocket` will continue to give you 2.x until Koa 2 is stable.
+> Koa v2 is now the default. For Koa v1 support install with koa-websocket@2 and see the `legacy` branch.
 
 ## Installation
 
@@ -47,7 +47,7 @@ const Koa = require('koa'),
   websockify = require('koa-websocket');
 
 const wsOptions = {};
-const app = websockify(koa(), wsOptions);
+const app = websockify(new Koa(), wsOptions);
 
 app.ws.use(route.all('/', function* (ctx) {
    // the websocket is added to the context as `this.websocket`.
