@@ -10,10 +10,9 @@ var koaws = require('..');
 describe('should route ws messages seperately', function() {
   const app = koaws(new Koa(), {
     handleProtocols: function (protocols) {
-      if (protocols.indexOf("bad_protocol") === -1)
-        return null;
-      else
+      if (protocols.indexOf("bad_protocol") !== -1)
         return false;
+      return protocols.pop();
     }
   });
 
@@ -94,6 +93,10 @@ describe('should route ws messages seperately', function() {
     var ws = new WebSocket('ws://localhost:' + server.address().port + '/abc', ['bad_protocol']);
     ws.on('open', function() {
       ws.send('abc');
+    });
+    ws.on('message', function(message) {
+      assert(false);
+      done();
     });
     ws.on('unexpected-response', function() {
       assert(true);
