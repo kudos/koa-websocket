@@ -6,7 +6,7 @@
 
 ## Installation
 
-`npm install koa-websocket@next`
+`npm install koa-websocket`
 
 ## Usage
 
