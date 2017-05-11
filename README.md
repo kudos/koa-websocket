@@ -36,12 +36,11 @@ app.ws.use(route.all('/test/:id', function (ctx) {
 }));
 
 app.listen(3000);
-
 ```
 
 With custom websocket options.
 
-```
+```js
 const Koa = require('koa'),
   route = require('koa-route'),
   websockify = require('koa-websocket');
@@ -58,5 +57,4 @@ app.ws.use(route.all('/', function* (ctx) {
 }));
 
 app.listen(3000);
-
 ```
