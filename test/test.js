@@ -1,20 +1,15 @@
 'use strict';
 
-var assert = require('assert'),
+const assert = require('assert'),
+  fs = require('fs'),
   WebSocket = require('ws'),
   Koa = require('koa'),
   route = require('koa-route');
 
-var koaws = require('..');
+const koaws = require('..');
 
 describe('should route ws messages seperately', function() {
-  const app = koaws(new Koa(), {
-    handleProtocols: function (protocols) {
-      if (protocols.indexOf("bad_protocol") !== -1)
-        return false;
-      return protocols.pop();
-    }
-  });
+  const app = koaws(new Koa());
 
   app.ws.use(function(ctx, next){
     ctx.websocket.on('message', function(message) {
@@ -43,10 +38,10 @@ describe('should route ws messages seperately', function() {
     });
   }));
 
-  var server = app.listen();
+  const server = app.listen();
 
   it('sends 123 message to any route', function(done){
-    var ws = new WebSocket('ws://localhost:' + server.address().port + '/not-a-route');
+    const ws = new WebSocket('ws://localhost:' + server.address().port + '/not-a-route');
     ws.on('open', function() {
       ws.send('123');
     });
@@ -57,7 +52,7 @@ describe('should route ws messages seperately', function() {
   });
 
   it('sends abc message to abc route', function(done){
-    var ws = new WebSocket('ws://localhost:' + server.address().port + '/abc');
+    const ws = new WebSocket('ws://localhost:' + server.address().port + '/abc');
     ws.on('open', function() {
       ws.send('abc');
     });
@@ -68,7 +63,7 @@ describe('should route ws messages seperately', function() {
   });
 
   it('sends def message to def route', function(done){
-    var ws = new WebSocket('ws://localhost:' + server.address().port + '/def');
+    const ws = new WebSocket('ws://localhost:' + server.address().port + '/def');
     ws.on('open', function() {
       ws.send('def');
     });
@@ -79,7 +74,7 @@ describe('should route ws messages seperately', function() {
   });
 
   it('handles urls with query parameters', function(done){
-    var ws = new WebSocket('ws://localhost:' + server.address().port + '/abc?foo=bar');
+    const ws = new WebSocket('ws://localhost:' + server.address().port + '/abc?foo=bar');
     ws.on('open', function() {
       ws.send('abc');
     });
@@ -88,9 +83,22 @@ describe('should route ws messages seperately', function() {
       done();
     });
   });
+});
+
+describe('should support custom ws server options', function() {
+
+  const app = koaws(new Koa(), {
+    handleProtocols: function (protocols) {
+      if (protocols.indexOf('bad_protocol') !== -1)
+        return false;
+      return protocols.pop();
+    }
+  });
+
+  const server = app.listen();
 
   it('reject bad protocol use wsOptions', function(done){
-    var ws = new WebSocket('ws://localhost:' + server.address().port + '/abc', ['bad_protocol']);
+    const ws = new WebSocket('ws://localhost:' + server.address().port + '/abc', ['bad_protocol']);
     ws.on('open', function() {
       ws.send('abc');
     });
@@ -104,4 +112,23 @@ describe('should route ws messages seperately', function() {
     });
   });
 });
-;
+
+describe('should support custom http server options', function() {
+
+  // The cert is self-signed.
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+  const secureApp = koaws(new Koa(), {}, {
+    key: fs.readFileSync('./test/key.pem'),
+    cert: fs.readFileSync('./test/cert.pem'),
+  });
+
+  const server = secureApp.listen();
+
+  it('supports wss protocol', function(done){
+    const ws = new WebSocket('wss://localhost:' + server.address().port + '/abc');
+    ws.on('open', function() {
+      done();
+    });
+  });
+});
