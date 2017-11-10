@@ -18,16 +18,16 @@ KoaWebSocketServer.prototype.listen = function (options) {
   this.server.on('connection', this.onConnection.bind(this));
 };
 
-KoaWebSocketServer.prototype.onConnection = function(socket) {
+KoaWebSocketServer.prototype.onConnection = function(socket, request) {
   debug('Connection received');
   socket.on('error', function (err) {
     debug('Error occurred:', err);
   });
   const fn = co.wrap(compose(this.middleware));
 
-  const context = this.app.createContext(socket.upgradeReq);
+  const context = this.app.createContext(request);
   context.websocket = socket;
-  context.path = url.parse(socket.upgradeReq.url).pathname;
+  context.path = url.parse(request.url).pathname;
 
   fn(context).catch(function(err) {
     debug(err);
