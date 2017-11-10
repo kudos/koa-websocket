@@ -1,65 +1,77 @@
+/*
+ * add WebSocket support to a Koa application
+ *
+ * - adds private _webSocketListen() method to application
+ * - re-use the middleware stack from the Koa application
+ * - close WebSocket when middleware stack fails
+ * - close WebSocket when route handler doesn't remove it from context
+ * - use ES6 and "ws" 3.x API
+ */
+
 'use strict';
 
-const url = require('url'),
-  https = require('https'),
-  compose = require('koa-compose'),
-  co = require('co'),
-  ws = require('ws');
-const WebSocketServer = ws.Server;
-const debug = require('debug')('koa:websockets');
+const compose = require('koa-compose'),
+      ws      = require('ws');
 
-function KoaWebSocketServer (app) {
-  this.app = app;
-  this.middleware = [];
-}
+/*
+ * const koaWebSockify(app, [wsOptions])
+ *
+ *  app       - Koa Application
+ *  wsOptions - parameters for ws.Server (optional)
+ */
+module.exports = (app, wsOptions) => {
+    // add private method to Koa application
+    app._webSocketsListen = function (server) { // needs access to "this"
+        // create WebSocket server; attach it to server
+        const wsServer = new ws.Server(
+                  Object.assign(wsOptions || {}, {
+                      server: server,
+                  })
+              );
 
-KoaWebSocketServer.prototype.listen = function (options) {
-  this.server = new WebSocketServer(options);
-  this.server.on('connection', this.onConnection.bind(this));
-};
+        // compose middleware stack from Koa application
+        const middleware = compose(this.middleware);
 
-KoaWebSocketServer.prototype.onConnection = function(socket, req) {
-  debug('Connection received');
-  socket.on('error', function (err) {
-    debug('Error occurred:', err);
-  });
-  const fn = co.wrap(compose(this.middleware));
+        // WebSocket connected handler
+        wsServer.on('connection', (socket, request) => {
+            /*
+             * Route handler should install an error handler
+             *
+             * // install default socket error handler
+             * socket.once('error', error => {
+             *     ...
+             * });
+             *
+             * The following code is similar to app.callback(). We can't
+             * use that, because we need to pass down the WebSocket.
+             */
+            return Promise.resolve()
+                .then(() => {
+                    // there is no API to create ServerReponse object :-(
+                    const dummyResp = {
+                              end()          {},
+                              setHeader()    {},
+                              removeHeader() {},
+                          },
+                          context = this.createContext(request, dummyResp);
 
-  const context = this.app.createContext(req);
-  context.websocket = socket;
-  context.path = url.parse(req.url).pathname;
+                    // add WebSocket to context for route handlers
+                    context.websocket = socket;
 
-  fn(context).catch(function(err) {
-    debug(err);
-  });
-};
+                    return context;
+                })
+                .then(context => Promise.resolve()
+                    .then(() => middleware(context))
+                    .then(() => {
+                        // this indicates error in route handler code
+                        if (context.websocket)
+                            socket.close(4000, `ERROR: WebSocket for '${context.url}' not handled`);
+                    })
+                )
+                .catch(error  => socket.close(4000, error.message));
+        });
+    };
 
-KoaWebSocketServer.prototype.use = function (fn) {
-  this.middleware.push(fn);
-  return this;
-};
-
-module.exports = function (app, wsOptions, httpsOptions) {
-  const oldListen = app.listen;
-  app.listen = function () {
-    debug('Attaching server...');
-    if (typeof httpsOptions === 'object') {
-      const httpsServer = https.createServer(httpsOptions, app.callback());
-      app.server = httpsServer.listen.apply(httpsServer, arguments);
-    } else {
-      app.server = oldListen.apply(app, arguments);
-    }
-    const options = { server: app.server};
-    if (wsOptions) {
-      for (var key in wsOptions) {
-        if (wsOptions.hasOwnProperty(key)) {
-          options[key] = wsOptions[key];
-        }
-      }
-    }
-    app.ws.listen(options);
-    return app.server;
-  };
-  app.ws = new KoaWebSocketServer(app);
-  return app;
+    // allow chaining
+    return app;
 };
