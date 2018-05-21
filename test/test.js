@@ -38,7 +38,15 @@ describe('should route ws messages seperately', function() {
     });
   }));
 
-  const server = app.listen();
+  let server = null;
+
+  before(function(done){
+    server = app.listen(done);
+  });
+
+  after(function(done){
+    server.close(done);
+  });
 
   it('sends 123 message to any route', function(done){
     const ws = new WebSocket('ws://localhost:' + server.address().port + '/not-a-route');
@@ -48,6 +56,7 @@ describe('should route ws messages seperately', function() {
     ws.on('message', function(message) {
       assert(message === '123');
       done();
+      ws.close();
     });
   });
 
@@ -59,6 +68,7 @@ describe('should route ws messages seperately', function() {
     ws.on('message', function(message) {
       assert(message === 'abc');
       done();
+      ws.close();
     });
   });
 
@@ -70,6 +80,7 @@ describe('should route ws messages seperately', function() {
     ws.on('message', function(message) {
       assert(message === 'def');
       done();
+      ws.close();
     });
   });
 
@@ -81,6 +92,7 @@ describe('should route ws messages seperately', function() {
     ws.on('message', function(message) {
       assert(message === 'abc');
       done();
+      ws.close();
     });
   });
 });
@@ -95,20 +107,22 @@ describe('should support custom ws server options', function() {
     }
   });
 
-  const server = app.listen();
+  let server = null;
+
+  before(function(done){
+    server = app.listen(done);
+  });
+
+  after(function(done){
+    server.close(done);
+  });
 
   it('reject bad protocol use wsOptions', function(done){
     const ws = new WebSocket('ws://localhost:' + server.address().port + '/abc', ['bad_protocol']);
-    ws.on('open', function() {
-      ws.send('abc');
-    });
-    ws.on('message', function(message) {
-      assert(false);
-      done();
-    });
-    ws.on('unexpected-response', function() {
+    ws.on('error', function() {
       assert(true);
       done();
+      ws.close();
     });
   });
 });
@@ -123,12 +137,22 @@ describe('should support custom http server options', function() {
     cert: fs.readFileSync('./test/cert.pem'),
   });
 
-  const server = secureApp.listen();
+  let server = null;
+
+  before(function(done){
+    server = secureApp.listen(done);
+  });
+
+  after(function(done){
+    server.close(done);
+  });
 
   it('supports wss protocol', function(done){
     const ws = new WebSocket('wss://localhost:' + server.address().port + '/abc');
     ws.on('open', function() {
+      assert(true);
       done();
+      ws.close();
     });
   });
 });

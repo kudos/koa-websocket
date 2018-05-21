@@ -4,7 +4,7 @@
   "description": "Light wrapper around Koa providing a websocket middleware handler that is koa-route compatible.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha $NODE_FLAGS test/test.js"
+    "test": "./node_modules/.bin/mocha $NODE_FLAGS --timeout 20000 test/test.js"
   },
   "keywords": [
     "koa",
@@ -25,14 +25,15 @@
   "license": "MIT",
   "dependencies": {
     "co": "^4.4.0",
-    "debug": "^2.1.2",
+    "debug": "^3.1.0",
     "koa-compose": "^4.0.0",
-    "ws": "^2.3.1"
+    "npm": "^6.0.1",
+    "ws": "^5.2.0"
   },
   "devDependencies": {
-    "eslint": "^4.6.1",
-    "koa": "^2.2.0",
+    "eslint": "^4.19.1",
+    "koa": "^2.5.1",
     "koa-route": "^3.2.0",
-    "mocha": "^3.3.0"
+    "mocha": "^5.2.0"
   }
 }
