@@ -2,6 +2,14 @@
 
 Note: koa-websocket follows semver.
 
+## v5.0.0
+
+* Upgraded all dependencies, including for ws to fix some security issues.
+
+## v4.1.0
+
+* Added support for passing https server options, enabling wss support - @stripedpajamas
+
 ## v4.0.0
 
 * Switch Koa v2 support to master, and moved v1 to the legacy branch.
