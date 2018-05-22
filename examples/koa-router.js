@@ -1,16 +1,19 @@
-var koa = require('koa');  
-var websockify = require('koa-websocket');
-var router = require('koa-router');
-var app = koa();
+const koa = require('koa');
+const router = require('koa-router');
+const websockify = require('..');
 
-var api = router();
-var socket = websockify(app);
+const app = koa();
 
-api.get('/*', function* (next) {
+const api = router();
+
+websockify(app);
+
+api.get('/*', function* get(next) {
   this.websocket.send('Hello World');
-  this.websocket.on('message', function(message) {
+  this.websocket.on('message', (message) => {
     console.log(message);
   });
+  yield next;
 });
 
 app.ws.use(api.routes()).use(api.allowedMethods());
