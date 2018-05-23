@@ -2,6 +2,10 @@
 
 Note: koa-websocket follows semver.
 
+## v5.0.1
+
+* Remove accidental addition of npm from dependencies
+
 ## v5.0.0
 
 * Upgraded all dependencies, including for ws to fix some security issues.
