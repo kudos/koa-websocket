@@ -45,7 +45,7 @@ Example with Let's Encrypt ([the Greenlock package](https://git.daplie.com/Dapli
 ```js
 const Koa = require('koa');
 const greenlock = require('greenlock-express');
-const websockify = require('koa-wss');
+const websockify = require('koa-websocket');
  
 const le = greenlock.create({
   // all your sweet Let's Encrypt options here
