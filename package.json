@@ -38,6 +38,6 @@
     "eslint-plugin-react": "^7.11.1",
     "koa": "^2.5.3",
     "koa-route": "^3.2.0",
-    "mocha": "^5.2.0"
+    "mocha": "^6.0.2"
   }
 }
