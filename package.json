@@ -28,7 +28,7 @@
     "co": "^4.4.0",
     "debug": "^4.0.1",
     "koa-compose": "^4.1.0",
-    "ws": "^6.0.0"
+    "ws": "^7.0.1"
   },
   "devDependencies": {
     "eslint": "^6.0.1",
