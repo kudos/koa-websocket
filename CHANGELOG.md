@@ -2,6 +2,11 @@
 
 Note: koa-websocket follows semver.
 
+## v6.0.0
+
+* Upgrade ws to 7.0.1, which drops support for Node 6.
+* Upgrade dev deps to fix a vuln with js-yaml.
+
 ## v5.0.1
 
 * Remove accidental addition of npm from dependencies
