@@ -1,7 +1,7 @@
 {
   "name": "koa-websocket",
   "version": "7.0.0",
-  "description": "Light wrapper around Koa providing a websocket middleware handler that is koa-route compatible.",
+  "description": "Light wrapper around Koa providing a websocket middleware handler that is koa-router compatible.",
   "main": "index.js",
   "scripts": {
     "test": "mocha $NODE_FLAGS test/test.js",
@@ -37,6 +37,7 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.4",
     "koa": "^2.13.4",
+    "@koa/router": "^10.1.1",
     "koa-route": "^3.2.0",
     "mocha": "^9.2.2"
   }
