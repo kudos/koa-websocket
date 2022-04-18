@@ -11,18 +11,12 @@ describe('should route ws messages seperately', () => {
 
   app.ws.use((ctx, next) => {
     ctx.websocket.on('message', (message) => {
-      if (message === '123') {
+      if (message.toString() === '123') {
         ctx.websocket.send(message);
       }
     });
     return next();
   });
-
-  app.ws.use(route.all('/abc', (ctx) => {
-    ctx.websocket.on('message', (message) => {
-      ctx.websocket.send(message);
-    });
-  }));
 
   app.ws.use(route.all('/abc', (ctx) => {
     ctx.websocket.on('message', (message) => {
@@ -51,8 +45,8 @@ describe('should route ws messages seperately', () => {
     ws.on('open', () => {
       ws.send('123');
     });
-    ws.on('message', (message) => {
-      assert(message === '123');
+    ws.on('message', (data) => {
+      assert(data.toString() === '123');
       done();
       ws.close();
     });
@@ -63,8 +57,8 @@ describe('should route ws messages seperately', () => {
     ws.on('open', () => {
       ws.send('abc');
     });
-    ws.on('message', (message) => {
-      assert(message === 'abc');
+    ws.on('message', (data) => {
+      assert(data.toString() === 'abc');
       done();
       ws.close();
     });
@@ -75,8 +69,8 @@ describe('should route ws messages seperately', () => {
     ws.on('open', () => {
       ws.send('def');
     });
-    ws.on('message', (message) => {
-      assert(message === 'def');
+    ws.on('message', (data) => {
+      assert(data.toString() === 'def');
       done();
       ws.close();
     });
@@ -87,8 +81,8 @@ describe('should route ws messages seperately', () => {
     ws.on('open', () => {
       ws.send('abc');
     });
-    ws.on('message', (message) => {
-      assert(message === 'abc');
+    ws.on('message', (data) => {
+      assert(data.toString() === 'abc');
       done();
       ws.close();
     });
@@ -98,7 +92,7 @@ describe('should route ws messages seperately', () => {
 describe('should support custom ws server options', () => {
   const app = koaws(new Koa(), {
     handleProtocols(protocols) {
-      if (protocols.indexOf('bad_protocol') !== -1) { return false; }
+      if (protocols.has('bad_protocol')) { return false; }
       return protocols.pop();
     },
   });
