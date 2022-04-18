@@ -25,18 +25,18 @@
   "homepage": "https://github.com/kudos/koa-websocket",
   "license": "MIT",
   "dependencies": {
-    "co": "^4.4.0",
-    "debug": "^4.0.1",
+    "co": "^4.6.0",
+    "debug": "^4.3.4",
     "koa-compose": "^4.1.0",
-    "ws": "^7.0.1"
+    "ws": "^7.5.7"
   },
   "devDependencies": {
-    "eslint": "^6.0.1",
-    "eslint-config-airbnb": "^17.1.1",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.2",
-    "koa": "^2.5.3",
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.4",
+    "koa": "^2.13.4",
     "koa-route": "^3.2.0",
     "mocha": "^9.2.2"
   }

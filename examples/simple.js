@@ -18,5 +18,4 @@ app.ws.use(route.all('/test/:id', function* all(next) {
   yield next;
 }));
 
-
 app.listen(3000);
