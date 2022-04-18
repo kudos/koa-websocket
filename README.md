@@ -1,6 +1,6 @@
 # koa-websocket
 
-[![Circle CI](https://circleci.com/gh/kudos/koa-websocket.svg?style=svg)](https://circleci.com/gh/kudos/koa-websocket)
+[![CI Status](https://github.com/kudos/koa-websocket/actions/workflows/node.js.yml/badge.svg)](https://github.com/kudos/koa-websocket/actions)
 
 > Koa v2 is now the default. For Koa v1 support install with koa-websocket@2 and see the `legacy` branch.
 
