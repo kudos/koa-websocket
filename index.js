@@ -1,7 +1,6 @@
 const url = require('url');
 const https = require('https');
 const compose = require('koa-compose');
-const co = require('co');
 const ws = require('ws');
 
 const WebSocketServer = ws.Server;
@@ -22,7 +21,7 @@ KoaWebSocketServer.prototype.onConnection = function onConnection(socket, req) {
   socket.on('error', (err) => {
     debug('Error occurred:', err);
   });
-  const fn = co.wrap(compose(this.middleware));
+  const fn = compose(this.middleware);
 
   const context = this.app.createContext(req);
   context.websocket = socket;

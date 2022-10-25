@@ -25,7 +25,6 @@
   "homepage": "https://github.com/kudos/koa-websocket",
   "license": "MIT",
   "dependencies": {
-    "co": "^4.6.0",
     "debug": "^4.3.4",
     "koa-compose": "^4.1.0",
     "ws": "^8.5.0"
